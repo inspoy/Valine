@@ -77,7 +77,7 @@ class Valine {
                                 </div>
                                 <section class="auth-section" style="display:none;">
                                     <div class="input-wrapper"><input type="text" name="author" class="vnick" placeholder="昵称" value=""></div>
-                                    <div class="input-wrapper"><input type="email" name="email" class="vmail" placeholder="邮箱" value=""></div>
+                                    <div class="input-wrapper"><input type="email" name="email" class="vmail" placeholder="邮箱（仅用于获取gravatar头像，不会公开）" value=""></div>
                                     <div class="input-wrapper"><input type="text" name="website" class="vlink" placeholder="网站 (可选)" value=""></div>
                                     <div class="post-action"><button type="button" class="vsubmit">提交</button></div>
                                 </section>
@@ -86,7 +86,12 @@ class Valine {
                            <div class="info">
                                 <div class="col">已有 <span class="count">0</span> 条评论</div>
                                 <div class="col power float-right">
-                                    <a href="https://segmentfault.com/markdown" target="_blank"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.69C0 12.48.52 13 1.15 13h13.69c.64 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM9 11H7V8L5.5 9.92 4 8v3H2V5h2l1.5 2L7 5h2v6zm2.99.5L9.5 8H11V5h2v3h1.5l-2.51 3.5z"></path></svg></a>
+                                    <a href="https://segmentfault.com/markdown" target="_blank">
+                                        <svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                                            <path fill-rule="evenodd" d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.69C0 12.48.52 13 1.15 13h13.69c.64 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM9 11H7V8L5.5 9.92 4 8v3H2V5h2l1.5 2L7 5h2v6zm2.99.5L9.5 8H11V5h2v3h1.5l-2.51 3.5z"></path>
+                                        </svg>
+                                        支持Markdown语法
+                                    </a>
                                 </div>
                            </div>
                            <div class="vsubmitting" style="display:none;"></div>
@@ -206,7 +211,11 @@ class Valine {
             _root.el.querySelector('.count').innerHTML = `${count}`;
             _root.bind(option);
         }, function (error) {
-            console.log(error);
+            console.error(error);
+            _root.loading.hide();
+            const errorInfo = `<p style="font-weight:bold">Code ${error.code}</p>${error.message}`;
+            var vpage = _root.el.querySelector('.vpage');
+            vpage.innerHTML = errorInfo;
         });
     }
 
@@ -455,7 +464,7 @@ class Valine {
             } else if (!mailRet.k) {
                 _root.alert.show({
                     type: 0,
-                    text: '请认真评论并填写正确的邮箱地址！<br>已开启<a href="https://deserts.io/diy-a-comment-system/" target="_blank">隐私防护</a>不会泄露您的个人信息，<a href="https://akismet.com/privacy/" target="_blank">了解反垃圾系统如何处理您的数据。</a>',
+                    text: '请认真评论并填写正确的邮箱地址，您的邮箱不会被公开！',
                     ctxt: '返回修改'
                 })
             } else if (!linkRet.k) {
