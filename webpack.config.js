@@ -8,6 +8,7 @@ var ROOT_PATH = path.resolve(__dirname);
 var APP_PATH = path.resolve(ROOT_PATH, 'src');
 var BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
 
+env = 'dev';
 var plugins = [];
 if (env !== 'dev') {
     plugins.push(

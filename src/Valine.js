@@ -77,7 +77,7 @@ class Valine {
                                 </div>
                                 <section class="auth-section" style="display:none;">
                                     <div class="input-wrapper"><input type="text" name="author" class="vnick" placeholder="昵称" value=""></div>
-                                    <div class="input-wrapper"><input type="email" name="email" class="vmail" placeholder="邮箱（仅用于获取gravatar头像，不会公开）" value=""></div>
+                                    <div class="input-wrapper"><input type="email" name="email" class="vmail" placeholder="邮箱（仅用于获取头像）" value=""></div>
                                     <div class="input-wrapper"><input type="text" name="website" class="vlink" placeholder="网站 (可选)" value=""></div>
                                     <div class="post-action"><button type="button" class="vsubmit">提交</button></div>
                                 </section>
@@ -113,12 +113,12 @@ class Valine {
             _root.nodata.show();
 
             // load smiles image
-            let _smile_wrapper = _root.el.querySelector('.vsmile-icons');            
+            let _smile_wrapper = _root.el.querySelector('.vsmile-icons');
             let smile_names = option.emoticon_list || [];
-            for(let i in smile_names) {
+            for (let i in smile_names) {
                 let img = document.createElement('img');
                 img.setAttribute('src', `${option.emoticon_url}/${smile_names[i]}`);
-                _smile_wrapper.appendChild(img) ;
+                _smile_wrapper.appendChild(img);
             }
             if (!disable_av_init) {
                 av.init({
@@ -181,8 +181,8 @@ class Valine {
             show(o) {
                 _mark.innerHTML = `<div class="valert txt-center"><div class="vtext">${o.text}</div><div class="vbtns"></div></div>`;
                 let _vbtns = _mark.querySelector('.vbtns');
-                let _cBtn = `<button class="vcancel vbtn">${ o && o.ctxt || '我再看看' }</button>`;
-                let _oBtn = `<button class="vsure vbtn">${ o && o.otxt || '继续提交' }</button>`;
+                let _cBtn = `<button class="vcancel vbtn">${o && o.ctxt || '我再看看'}</button>`;
+                let _oBtn = `<button class="vsure vbtn">${o && o.otxt || '继续提交'}</button>`;
                 _vbtns.innerHTML = `${_cBtn}${o.type && _oBtn}`;
                 _mark.querySelector('.vcancel').addEventListener('click', function (e) {
                     _root.alert.hide();
@@ -226,10 +226,10 @@ class Valine {
         let _root = this;
         // Smile pictures
         let vsmiles = _root.el.querySelector('.vsmile-icons');
+        var textField = _root.el.querySelector('.veditor');
         Event.on('click', vsmiles, (e) => {
-            var textField = _root.el.querySelector('.veditor');
             let imgSrc = e.target.src;
-            if ( typeof imgSrc == 'undefined' ) return;
+            if (typeof imgSrc == 'undefined') return;
             // var tag = " ![](/" + imgSrc.replace(/^.*\/(.*\.gif)$/, '$1') + ") ";
             var tag = "!(:" + decodeURI(imgSrc).replace(/^.*\/(.*)$/, '$1') + ":)";
             if (document.selection) {
@@ -254,6 +254,9 @@ class Valine {
             let submitBtn = _root.el.querySelector('.vsubmit');
             if (submitBtn.getAttribute('disabled')) submitBtn.removeAttribute('disabled');
         })
+        Event.on('input', textField, (e) => {
+            console.log(e);
+        });
         let comment_trigger = _root.el.querySelector('.comment_trigger');
         Event.on('click', comment_trigger, (e) => {
             comment_trigger.setAttribute('style', 'display:none');
@@ -317,7 +320,7 @@ class Valine {
         }
         query();
 
-        let insertComment = (ret, top=true) => {
+        let insertComment = (ret, top = true) => {
             let _vcard = document.createElement('li');
             _vcard.setAttribute('class', 'vcard');
             _vcard.setAttribute('id', ret.id);
@@ -328,7 +331,7 @@ class Valine {
                                     <img class="vavatar" src="${gravatar_url}"/>
                                     <a rid='${ret.id}' at='@${ret.get('nick')}' class="vat">回复</a>
                                     <div class="vmeta-info"> <div>
-                                    ${ret.get('link') ? `<a class="vname" href="${ ret.get('link') }" target="_blank" rel="nofollow" > ${ret.get("nick")}</a>` : `<span class="vname">${ret.get("nick")}</span>`}
+                                    ${ret.get('link') ? `<a class="vname" href="${ret.get('link')}" target="_blank" rel="nofollow" > ${ret.get("nick")}</a>` : `<span class="vname">${ret.get("nick")}</span>`}
                                     </div><div class="vtime">${timeAgo(ret.get("createdAt"))}</div>
                                     </div>
                                 </div>
@@ -435,15 +438,15 @@ class Valine {
                 return;
             }
             // render markdown
-            defaultComment.comment = xss(md(defaultComment.comment.replace(/!\(:(.*?\.\w+):\)/g, 
-                                            `<img src="${option.emoticon_url}/$1" alt="$1" class="vemoticon-img">`)),
-                                            {
-                                                onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
-                                                if (name === 'class') {
-                                                    return name + '="' + xss.escapeAttrValue(value) + '"';
-                                                }
-                                                }
-                                            });
+            defaultComment.comment = xss(md(defaultComment.comment.replace(/!\(:(.*?\.\w+):\)/g,
+                `<img src="${option.emoticon_url}/$1" alt="$1" class="vemoticon-img">`)),
+                {
+                    onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
+                        if (name === 'class') {
+                            return name + '="' + xss.escapeAttrValue(value) + '"';
+                        }
+                    }
+                });
             let idx = defaultComment.comment.indexOf(defaultComment.at);
             if (idx > -1 && defaultComment.at != '') {
                 let at = `<a class="at" href='#${defaultComment.rid}'>${defaultComment.at}</a>`;
@@ -480,7 +483,7 @@ class Valine {
 
         let smile_btn = _root.el.querySelector('.vemoji-btn');
         let smile_icons = _root.el.querySelector('.vsmile-icons');
-        Event.on('click', smile_btn, (e)=>{
+        Event.on('click', smile_btn, (e) => {
             if (preview_text.getAttribute('triggered')) {
                 preview_text.setAttribute('style', 'display:none;');
                 preview_text.removeAttribute('triggered');
@@ -497,7 +500,7 @@ class Valine {
 
         let preview_btn = _root.el.querySelector('.vpreview-btn');
         let preview_text = _root.el.querySelector('.vpreview-text');
-        Event.on('click', preview_btn, (e)=>{
+        Event.on('click', preview_btn, (e) => {
             if (smile_icons.getAttribute('triggered')) {
                 smile_icons.setAttribute('style', 'display:none;');
                 smile_icons.removeAttribute('triggered');
@@ -512,15 +515,15 @@ class Valine {
                     return;
                 }
                 // render markdown
-                preview_text.innerHTML = xss(md(defaultComment.comment.replace(/!\(:(.*?\.\w+):\)/g, 
-                                                `<img src="${option.emoticon_url}/$1" alt="$1" class="vemoticon-img">`)),
-                                                {
-                                                    onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
-                                                      if (name === 'class') {
-                                                        return name + '="' + xss.escapeAttrValue(value) + '"';
-                                                      }
-                                                    }
-                                                  });
+                preview_text.innerHTML = xss(md(defaultComment.comment.replace(/!\(:(.*?\.\w+):\)/g,
+                    `<img src="${option.emoticon_url}/$1" alt="$1" class="vemoticon-img">`)),
+                    {
+                        onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
+                            if (name === 'class') {
+                                return name + '="' + xss.escapeAttrValue(value) + '"';
+                            }
+                        }
+                    });
                 preview_text.removeAttribute('style');
                 preview_text.setAttribute('triggered', 1);
             }
@@ -720,9 +723,9 @@ const loadJS = function (url, success) {
     document.getElementsByTagName('head')[0].appendChild(domScript);
 };
 
-const getIp = function(){
+const getIp = function () {
     $.getJSON("https://api.ipify.org/?format=json",
-        function(json) {
+        function (json) {
             defaultComment['ip'] = json.ip;
         }
     );
