@@ -1,3 +1,293 @@
+@mixin markdown{
+  // blockquote {
+  //   p {
+  //     padding-left: 12px;
+  //   }
+  // }
+  // p {
+  //   word-wrap: break-word;
+  //   white-space: pre-wrap;
+  //   word-break: break-all;
+  //   text-align: justify;
+  //   line-height: 1.8;
+  // }
+  // pre {
+  //   overflow: auto;
+  //   padding: 6px 10px;
+  //   word-wrap: break-word;
+  //   color: #555;
+  //   background: #f5f2f2;
+  //   border-radius: 3px;
+  //   font-size: .875rem;
+  //   margin: 5px 0;
+  // }
+  * {
+      font-family: PingFang SC,Lantinghei SC,Helvetica Neue,Helvetica,Arial,Microsoft YaHei,STHeitiSC-Light,simsun,WenQuanYi Zen Hei,WenQuanYi Micro Hei,"sans-serif";
+  }
+
+  img {
+      max-width: 100%;
+  }
+
+  @media screen and (min-width: 1000px) {
+      body {
+          width: 842px;
+          margin: 10px auto;
+      }
+
+
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+      color: #111111;
+      font-weight: 400;
+      margin-top: 1em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  dl {
+      margin-bottom: 16px;
+      padding: 0;
+  }
+
+  p {
+      margin-top: 8px;
+      margin-bottom: 3px;
+  }
+
+  h1 {
+      font-size: 32px;
+      line-height: 54px;
+      font-weight: bold;
+  }
+
+  h2 {
+      font-size: 28px;
+      line-height: 42px;
+  }
+
+  h1,
+  h2 {
+      border-bottom: 1px solid #EFEAEA;
+      padding-bottom: 10px;
+  }
+
+  h3 {
+      font-size: 24px;
+      line-height: 30px;
+  }
+
+  h4 {
+      font-size: 21px;
+      line-height: 26px;
+  }
+
+  h5 {
+      font-size: 18px;
+      line-height: 23px;
+  }
+
+  a {
+      color: #0099ff;
+      margin: 0 2px;
+      padding: 0;
+      vertical-align: baseline;
+      text-decoration: none;
+  }
+
+  a:hover {
+      text-decoration: none;
+      color: #ff6600;
+  }
+
+  a:visited {
+      color: #0099ff;
+  }
+
+  ul,
+  ol {
+      padding: 0;
+      padding-left: 18px;
+      margin: 0;
+  }
+
+  li {
+      line-height: 24px;
+  }
+
+  ul li{
+      list-style: initial;
+  }
+
+  ol li{
+      list-style: decimal;
+  }
+
+  p,
+  ul,
+  ol {
+      font-size: 16px;
+      line-height: 24px;
+  }
+
+  ol ol,
+  ul ol {
+      list-style-type: lower-roman;
+  }
+
+  code,
+  pre {
+      font-family: Consolas, Monaco, Andale Mono, monospace;
+      background-color: #f7f7f7;
+      color: inherit;
+  }
+
+  code {
+      font-family: Consolas, Monaco, Andale Mono, monospace;
+      margin: 0 2px;
+  }
+
+  pre {
+      font-family: Consolas, Monaco, Andale Mono, monospace;
+      line-height: 1.7em;
+      overflow: auto;
+      padding: 6px 10px;
+      border-left: 5px solid #6CE26C;
+  }
+
+  pre>code {
+      font-family: Consolas, Monaco, Andale Mono, monospace;
+      border: 0;
+      display: inline;
+      max-width: initial;
+      padding: 0;
+      margin: 0;
+      overflow: initial;
+      line-height: 1.6em;
+      font-size: .95em;
+      white-space: pre;
+      background: 0 0;
+
+  }
+
+  code {
+      color: #666555;
+  }
+
+  aside {
+      display: block;
+      float: right;
+      width: 390px;
+  }
+
+  blockquote {
+      font-family: '仿宋'!important;
+      border-left: .5em solid #eee;
+      padding: 0 0 0 2em;
+      margin-left: 0;
+  }
+
+  blockquote cite {
+      font-size: 14px;
+      line-height: 20px;
+      color: #bfbfbf;
+  }
+
+  blockquote cite:before {
+      content: '\2014 \00A0';
+  }
+
+  blockquote p {
+      color: #666;
+  }
+
+  hr {
+      text-align: left;
+      color: #999;
+      height: 2px;
+      padding: 0;
+      margin: 16px 0;
+      background-color: #e7e7e7;
+      border: 0 none;
+  }
+
+  dl {
+      padding: 0;
+  }
+
+  dl dt {
+      padding: 10px 0;
+      margin-top: 16px;
+      font-size: 1em;
+      font-style: italic;
+      font-weight: bold;
+  }
+
+  dl dd {
+      padding: 0 16px;
+      margin-bottom: 16px;
+  }
+
+  dd {
+      margin-left: 0;
+  }
+
+  table {
+      *border-collapse: collapse;
+      /* IE7 and lower */
+      border-spacing: 0;
+      width: 100%;
+  }
+
+  table {
+      border: solid #ccc 1px;
+  }
+
+  table thead {
+      background: #f7f7f7;
+  }
+
+  table thead tr:hover {
+      background: #f7f7f7
+  }
+
+  table tr:hover {
+      background: #fbf8e9;
+      -o-transition: all 0.1s ease-in-out;
+      -webkit-transition: all 0.1s ease-in-out;
+      -moz-transition: all 0.1s ease-in-out;
+      -ms-transition: all 0.1s ease-in-out;
+      transition: all 0.1s ease-in-out;
+  }
+
+  table td,
+  .table th {
+      border-left: 1px solid #ccc;
+      border-top: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+  }
+
+  table th {
+      border-top: none;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+      padding: 5px;
+      border-left: 1px solid #ccc;
+  }
+
+  table td:first-child,
+  table th:first-child {
+      border-left: none;
+  }
+}
+
 .valine {
   * {
     box-sizing: border-box;
@@ -64,8 +354,9 @@
         border-radius: 0;
         padding: .5em .5em;
         margin: .3em 0;
-        max-height: 10em;
+        // max-height: 10em;
         overflow: auto;
+        @include markdown;
       }
     }
     .textarea-wrapper {
@@ -365,6 +656,12 @@
         position: relative;
         .vmeta-info {
           margin: 0 0 0 48px;
+          .vua {
+            margin-left: 10px;
+            padding: 0 10px 0 10px;
+            color: white;
+            background-color: #66aaff;
+          }
         }
         .vname {
           font-weight: bolder;
@@ -395,28 +692,7 @@
           position: relative;
           padding: .2em;
           overflow: auto;
-          blockquote {
-            p {
-              padding-left: 12px;
-            }
-          }
-          p {
-            word-wrap: break-word;
-            white-space: pre-wrap;
-            word-break: break-all;
-            text-align: justify;
-            line-height: 1.8;
-          }
-          pre {
-            overflow: auto;
-            padding: 6px 10px;
-            word-wrap: break-word;
-            color: #555;
-            background: #f5f2f2;
-            border-radius: 3px;
-            font-size: .875rem;
-            margin: 5px 0;
-          }
+          @include markdown;
           &.expand {
             cursor: pointer;
             max-height: 11.25rem;

@@ -1,10 +1,11 @@
 require('./Valine.scss');
+var detectFactory = require('./detect.js');
 var md = require('marked');
 var xss = require('xss');
 var crypto = require('blueimp-md5');
 
 var GRAVATAR_BASE_URL = 'https://gravatar.loli.net/avatar/';
-var DEFAULT_EMAIL_HASH = '9e63c80900d106cbbec5a9f4ea433a3e';
+// var DEFAULT_EMAIL_HASH = '9e63c80900d106cbbec5a9f4ea433a3e';
 
 
 var defaultComment = {
@@ -16,8 +17,7 @@ var defaultComment = {
     mail: '',
     link: '',
     ua: navigator.userAgent,
-    url: location.pathname,
-    pin: 0
+    url: location.pathname
 };
 
 var disable_av_init = false;
@@ -60,7 +60,7 @@ class Valine {
             let eleHTML = `<div class="vwrap">
                                 <div class="textarea-wrapper">
                                     <div class="comment_trigger">
-                                        <div class="avatar"><img class="visitor_avatar" src="${GRAVATAR_BASE_URL + DEFAULT_EMAIL_HASH + '?size=80'}"></div>
+                                        <div class="avatar"><img class="visitor_avatar" src="${GRAVATAR_BASE_URL + '?d=identicon&size=80'}"></div>
                                         <div class="trigger_title">${placeholder}</div>
                                     </div>
                                     <div class="veditor-area">
@@ -255,7 +255,17 @@ class Valine {
             if (submitBtn.getAttribute('disabled')) submitBtn.removeAttribute('disabled');
         })
         Event.on('input', textField, (e) => {
-            console.log(e);
+            defaultComment["comment"] = textField.value;
+            // render markdown
+            preview_text.innerHTML = xss(md(defaultComment.comment.replace(/!\(:(.*?\.\w+):\)/g,
+                `<img src="${option.emoticon_url}/$1" alt="$1" class="vemoticon-img">`)),
+                {
+                    onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
+                        if (name === 'class') {
+                            return name + '="' + xss.escapeAttrValue(value) + '"';
+                        }
+                    }
+                });
         });
         let comment_trigger = _root.el.querySelector('.comment_trigger');
         Event.on('click', comment_trigger, (e) => {
@@ -282,7 +292,7 @@ class Valine {
             query2.equalTo('url', defaultComment['url'] + '/');
             let query = AV.Query.or(query1, query2);
             query.notEqualTo('isSpam', true);
-            query.select(['nick', 'comment', 'link', 'rid', 'emailHash']);
+            query.select(['nick', 'comment', 'link', 'rid', 'emailHash', 'ua']);
             query.addDescending('createdAt');
             return query;
         };
@@ -320,24 +330,33 @@ class Valine {
         }
         query();
 
+        let getUa = (ua) => {
+            var detector = detectFactory(ua);
+            return `${detector.browser} ${detector.version} on ${detector.os} ${detector.osVersion}`;
+        }
+
         let insertComment = (ret, top = true) => {
             let _vcard = document.createElement('li');
             _vcard.setAttribute('class', 'vcard');
             _vcard.setAttribute('id', ret.id);
             let emailHash = ret.get('emailHash')
-            let gravatar_url = GRAVATAR_BASE_URL + emailHash + '?size=80&d=https%3a%2f%2fgravatar.loli.net%2favatar%2f9e63c80900d106cbbec5a9f4ea433a3e.jpg%3fsize%3d80';
+            let gravatar_url = GRAVATAR_BASE_URL + emailHash + '?size=80&d=identicon&size=80';
             // language=HTML
-            _vcard.innerHTML = `<div class="vhead" >
-                                    <img class="vavatar" src="${gravatar_url}"/>
-                                    <a rid='${ret.id}' at='@${ret.get('nick')}' class="vat">回复</a>
-                                    <div class="vmeta-info"> <div>
-                                    ${ret.get('link') ? `<a class="vname" href="${ret.get('link')}" target="_blank" rel="nofollow" > ${ret.get("nick")}</a>` : `<span class="vname">${ret.get("nick")}</span>`}
-                                    </div><div class="vtime">${timeAgo(ret.get("createdAt"))}</div>
-                                    </div>
-                                </div>
-                                <section class="text-wrapper">
-                                    <div class="vcomment">${ret.get('comment')}</div>
-                                </section>
+            _vcard.innerHTML =
+                `<div class="vhead" >
+                    <img class="vavatar" src="${gravatar_url}"/>
+                    <a rid='${ret.id}' at='@${ret.get('nick')}' class="vat">回复</a>
+                    <div class="vmeta-info">
+                        <div>
+                        ${ret.get('link') ? `<a class="vname" href="${ret.get('link')}" target="_blank" rel="nofollow" > ${ret.get("nick")}</a>` : `<span class="vname">${ret.get("nick")}</span>`}
+                        <span class="vua">${getUa(ret.get('ua'))}</span>
+                        </div>
+                        <div class="vtime">${timeAgo(ret.get("createdAt"))}</div>
+                    </div>
+                </div>
+                <section class="text-wrapper">
+                    <div class="vcomment">${ret.get('comment')}</div>
+                </section>
                                         `;
             let _vlist = _root.el.querySelector('.vlist');
             let _vlis = _vlist.querySelectorAll('li');
@@ -389,7 +408,7 @@ class Valine {
                 }
                 if (s['mail'] != '') {
                     let el = _root.el.querySelector('.visitor_avatar');
-                    el.setAttribute('src', GRAVATAR_BASE_URL + crypto(s['mail'].toLowerCase().trim()) + '?size=80&d=https%3a%2f%2fgravatar.loli.net%2favatar%2f9e63c80900d106cbbec5a9f4ea433a3e.jpg%3fsize%3d80');
+                    el.setAttribute('src', GRAVATAR_BASE_URL + crypto(s['mail'].toLowerCase().trim()) + '?size=80&d=identicon&size=80');
                 }
             }
         }
