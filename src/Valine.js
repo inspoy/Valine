@@ -322,6 +322,7 @@ class Valine {
                         })
                     }
                 }
+                document.getElementsByClassName("valine-comment-count")[0].innerText = len;
                 _root.loading.hide();
             }).catch(ex => {
                 console.log(ex);
@@ -333,6 +334,14 @@ class Valine {
         let getUa = (ua) => {
             var detector = detectFactory(ua);
             return `${detector.browser} ${detector.version} on ${detector.os} ${detector.osVersion}`;
+        }
+
+        let parseLink = (link) => {
+            if (/^(http|https)/.test(link))
+            {
+                return link;
+            }
+            return `http://${link}`;
         }
 
         let insertComment = (ret, top = true) => {
@@ -348,7 +357,7 @@ class Valine {
                     <a rid='${ret.id}' at='@${ret.get('nick')}' class="vat">回复</a>
                     <div class="vmeta-info">
                         <div>
-                        ${ret.get('link') ? `<a class="vname" href="${ret.get('link')}" target="_blank" rel="nofollow" > ${ret.get("nick")}</a>` : `<span class="vname">${ret.get("nick")}</span>`}
+                        ${ret.get('link') ? `<a class="vname" href="${parseLink(ret.get('link'))}" target="_blank" rel="nofollow" > ${ret.get("nick")}</a>` : `<span class="vname">${ret.get("nick")}</span>`}
                         <span class="vua">${getUa(ret.get('ua'))}</span>
                         </div>
                         <div class="vtime">${timeAgo(ret.get("createdAt"))}</div>
