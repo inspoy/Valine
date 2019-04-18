@@ -77,7 +77,7 @@ class Valine {
                                 </div>
                                 <section class="auth-section" style="display:none;">
                                     <div class="input-wrapper"><input type="text" name="author" class="vnick" placeholder="昵称" value=""></div>
-                                    <div class="input-wrapper"><input type="email" name="email" class="vmail" placeholder="邮箱（仅用于获取头像）" value=""></div>
+                                    <div class="input-wrapper"><input type="email" name="email" class="vmail" placeholder="邮箱（用于获取头像和邮件提醒）" value=""></div>
                                     <div class="input-wrapper"><input type="text" name="website" class="vlink" placeholder="网站 (可选)" value=""></div>
                                     <div class="post-action"><button type="button" class="vsubmit">提交</button></div>
                                 </section>
